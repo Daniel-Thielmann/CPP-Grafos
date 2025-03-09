@@ -1,0 +1,10 @@
+Daniel Alves Thielmann:
+- Da entrega organização do git e organização de pastas
+- Das instâncias, procurei e tratei os arquivos .mtx no código
+- Compilação do código via terminal
+- Documentação no Docs e Relatório
+- Verificação de vazamento de memória com Valgrind
+- Arquivos criados: 
+* grafo_lista.h, grafo_matriz.h, grafo.h, listaAdj.h, mtx_loader.h
+* grafo_lista.cpp, grafo_matriz.cpp, grafo.cpp, listaAdj.cpp, mtx_loader.cpp
+* main.cpp
