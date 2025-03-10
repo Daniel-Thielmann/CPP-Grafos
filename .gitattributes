@@ -1,0 +1,2 @@
+entradas/instancias/*.mtx filter=lfs diff=lfs merge=lfs -text
+entradas/instancias/*.edges filter=lfs diff=lfs merge=lfs -text
