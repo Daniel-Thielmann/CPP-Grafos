@@ -17,6 +17,7 @@ private:
     int numVertices;
 
 public:
+    ListaAdj();  // ✅ Construtor padrão
     ListaAdj(int numVertices);
     ~ListaAdj();
     void inserirAresta(int origem, int destino, int peso);

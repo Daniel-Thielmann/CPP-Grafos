@@ -4,34 +4,37 @@
 
 using namespace std;
 
-// Construtor: inicializa um vetor de listas encadeadas
+// ✅ Construtor corrigido para evitar erro de inicialização
 GrafoLista::GrafoLista(int numVertices, bool direcionado, bool verticesPonderados, bool arestasPonderadas)
     : Grafo(numVertices, direcionado, verticesPonderados, arestasPonderadas) {
-    listaAdj = new ListaAdj[numVertices]; // Aloca um array de listas encadeadas
+    listaAdj = new ListaAdj[numVertices];
+    for (int i = 0; i < numVertices; i++) {
+        listaAdj[i] = ListaAdj(numVertices);
+    }
 }
 
-// Destrutor: libera memória
+// ✅ Destrutor para liberar memória corretamente
 GrafoLista::~GrafoLista() {
     delete[] listaAdj;
 }
 
-// Adiciona aresta ao grafo
+// ✅ Método para adicionar aresta corretamente
 void GrafoLista::adicionarAresta(int origem, int destino, int peso) {
-    listaAdj[origem].inserir(destino, peso);
+    listaAdj[origem].inserirAresta(origem, destino, peso);
     if (!ehDirecionado()) {
-        listaAdj[destino].inserir(origem, peso);
+        listaAdj[destino].inserirAresta(destino, origem, peso);
     }
 }
 
-// Imprime a lista de adjacência
+// ✅ Método para imprimir a lista de adjacência
 void GrafoLista::imprimirGrafo() const {
     cout << "Lista de Adjacência:" << endl;
     for (int i = 0; i < numVertices; i++) {
-        listaAdj[i].imprimir(i);
+        listaAdj[i].imprimir();
     }
 }
 
-// Carrega o grafo de um arquivo
+// ✅ Método para carregar o grafo de um arquivo
 void GrafoLista::carregarGrafo(const string& nomeArquivo) {
     ifstream arquivo(nomeArquivo);
     if (!arquivo) {
@@ -48,6 +51,9 @@ void GrafoLista::carregarGrafo(const string& nomeArquivo) {
 
     delete[] listaAdj; // Liberar memória antes de realocar
     listaAdj = new ListaAdj[n];
+    for (int i = 0; i < n; i++) {
+        listaAdj[i] = ListaAdj(n);
+    }
 
     int origem, destino, peso;
     while (arquivo >> origem >> destino >> peso) {
