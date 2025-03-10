@@ -20,6 +20,8 @@ Esse problema é NP-completo, o que significa que não existe um algoritmo efici
 2. Descrição das Instâncias
 Para testar os algoritmos implementados, foram utilizadas 10 instâncias do TSP representando redes rodoviárias reais, extraídas da NetworkRepository do banco de dados Road Networks.
 
+2.1 Site para download das instancias: https://networkrepository.com/road.php
+
 As instâncias utilizadas foram:
 
 road-asia-osm.mtx → Rede rodoviária da Ásia
