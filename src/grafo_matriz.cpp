@@ -47,3 +47,33 @@ void GrafoMatriz::carregarGrafo(const string& nomeArquivo) {
     }
     arquivo.close();
 }
+
+pair<int, int>* GrafoMatriz::getArestas(int vertice, int& tamanho) const {
+    // Usando size_t para a comparação com matrizAdj.size()
+    if (vertice < 0 || static_cast<size_t>(vertice) >= matrizAdj.size()) {
+        tamanho = 0;
+        return nullptr;
+    }
+
+    // Contar o número de vizinhos
+    size_t count = 0;
+    for (size_t i = 0; i < matrizAdj.size(); i++) {
+        if (matrizAdj[vertice][i] != 0) {
+            count++;
+        }
+    }
+
+    // Criar array dinâmico
+    pair<int, int>* vizinhos = new pair<int, int>[count];
+    tamanho = count;
+
+    // Preencher o array com vizinhos e pesos
+    size_t index = 0;
+    for (size_t i = 0; i < matrizAdj.size(); i++) {
+        if (matrizAdj[vertice][i] != 0) {
+            vizinhos[index++] = {i, matrizAdj[vertice][i]};
+        }
+    }
+
+    return vizinhos;
+}

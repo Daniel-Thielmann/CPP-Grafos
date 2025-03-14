@@ -24,6 +24,7 @@ public:
     virtual void adicionarAresta(int origem, int destino, int peso) = 0;
     virtual void imprimirGrafo() const = 0;
     virtual void carregarGrafo(const string& nomeArquivo) = 0;
+    virtual std::pair<int, int>* getArestas(int vertice, int& tamanho) const = 0;
 
     // Métodos auxiliares
     int getNumVertices() const;

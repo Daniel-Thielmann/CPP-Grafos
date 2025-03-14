@@ -22,6 +22,7 @@ public:
     ~ListaAdj();
     void inserirAresta(int origem, int destino, int peso);
     void imprimir() const;
+    std::pair<int, int>* obterVizinhos(int vertice, int& tamanho) const;
 };
 
 #endif // LISTA_ADJ_H

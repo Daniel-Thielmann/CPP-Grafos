@@ -2,15 +2,33 @@
 #define GULOSO_H
 
 #include "grafo_matriz.h"
-#include <vector>
+#include "grafo_lista.h"
 #include <limits>
 #include <iostream>
 
 using namespace std;
 
 class Guloso {
+private:
+    int* melhorRota;   // Melhor rota encontrada (Agora um array dinâmico)
+    int menorCusto;    // Menor custo encontrado
+    int numCidades;    // Número de cidades
+    int melhorRotaIndex; // Índice para rastrear a melhor rota
+
 public:
-    static vector<int> resolverTSP(const GrafoMatriz& grafo);
+    Guloso() : melhorRota(nullptr), menorCusto(numeric_limits<int>::max()), numCidades(0), melhorRotaIndex(0) {}
+
+    ~Guloso() {
+        delete[] melhorRota;  // Libera a memória alocada dinamicamente
+    }
+
+    void resolverTSPMatriz(const GrafoMatriz& grafo);
+    
+    void resolverTSPLista(const GrafoLista& grafo);
+    
+    int* getMelhorRota(int& tamanho) const;
+    int getMenorCusto() const;
+    int getNumCidades() const;
 };
 
-#endif // GULOSO_H
+#endif
