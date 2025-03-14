@@ -1,43 +1,61 @@
 #include "mtx_loader.h"
+#include <fstream>
+#include <sstream>
+#include <iostream>
 
-void MTXLoader::carregarMTX(const string& nomeArquivo, int &numVertices, int &numArestas, ListaAdj* &listaAdj) {
-    ifstream arquivo(nomeArquivo);
+void MTXLoader::carregarMTX(
+    const std::string& nomeArquivo, 
+    GrafoMatriz* &grafoMatriz, 
+    GrafoLista* &grafoLista
+) {
+    std::ifstream arquivo(nomeArquivo);
     if (!arquivo) {
-        cerr << "❌ Erro ao abrir o arquivo: " << nomeArquivo << endl;
+        std::cerr << "❌ Erro ao abrir o arquivo: " << nomeArquivo << std::endl;
         return;
     }
 
-    string linha;
+    std::string linha;
     bool primeiraLinha = true;
-    int contador = 0;
+    int numVertices, numArestas;
+    bool direcionado = false;
 
-    while (getline(arquivo, linha)) {
-        if (linha[0] == '%') continue; // Ignorar comentários
+    while (std::getline(arquivo, linha)) {
+        if (linha[0] == '%') {
+            if (linha.find("symmetric") != std::string::npos) direcionado = false;
+            continue;
+        }
 
         if (primeiraLinha) {
-            stringstream ss(linha);
+            std::stringstream ss(linha);
             ss >> numVertices >> numVertices >> numArestas;
-            cout << "🔹 Número de Vértices: " << numVertices << ", Arestas: " << numArestas << endl;
-
-            // Criamos a lista de adjacência
-            listaAdj = new ListaAdj(numVertices);
+            
+            // Criar grafos com base nas informações lidas
+            grafoMatriz = new GrafoMatriz(numVertices, direcionado, false, true);
+            grafoLista = new GrafoLista(numVertices, direcionado, false, true);
+            
+            std::cout << "🔹 Grafos criados: " << numVertices << " vértices, " 
+                      << numArestas << " arestas" << std::endl;
             primeiraLinha = false;
             continue;
         }
 
-        // Leitura das arestas
         int origem, destino, peso;
-        stringstream ss(linha);
+        std::stringstream ss(linha);
         ss >> origem >> destino >> peso;
 
-        // Inserir aresta na lista de adjacência
-        listaAdj->inserirAresta(origem - 1, destino - 1, peso);
+        // Ajustar índices para zero-based
+        origem--; destino--;
 
-        if (++contador % 100000 == 0) {
-            cout << "🔄 Processando aresta " << contador << "..." << endl;
+        // Adicionar aresta a ambos os grafos
+        grafoMatriz->adicionarAresta(origem, destino, peso);
+        grafoLista->adicionarAresta(origem, destino, peso);
+
+        if (!direcionado) {
+            grafoMatriz->adicionarAresta(destino, origem, peso);
+            grafoLista->adicionarAresta(destino, origem, peso);
         }
     }
 
     arquivo.close();
-    cout << "✅ Carregamento de " << numArestas << " arestas concluído!" << endl;
+    std::cout << "✅ Dados carregados em ambos os grafos com sucesso!" << std::endl;
 }
