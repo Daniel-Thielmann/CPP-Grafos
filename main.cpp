@@ -26,7 +26,7 @@ int main() {
     ///////////////////////////////GRAFO MATRIZ/////////////////////////////////////
     // Imprimindo o grafo
     cout << "Grafo Matriz:" << endl << endl;
-    grafoMatriz->imprimirGrafo();
+   // grafoMatriz->imprimirGrafo();
 
     // Construir matriz de custos a partir da matriz de adjacência
     int nMatriz = grafoMatriz->getNumVertices();
@@ -62,7 +62,7 @@ int main() {
     ///////////////////////////////GRAFO LISTA///////////////////////////////////////////
     // Imprimindo o grafo
     cout << "Grafo Lista:" << endl << endl;
-    grafoLista->imprimirGrafo();
+  //  grafoLista->imprimirGrafo();
 
     // Construir matriz de custos a partir do grafo lista
     int nLista = grafoLista->getNumVertices();
@@ -96,8 +96,8 @@ int main() {
     delete[] costMatrixLista;
 
     // Se os grafos foram alocados dinamicamente, pode ser necessário liberar a memória:
-    // delete grafoMatriz;
-    // delete grafoLista;
+    delete grafoMatriz;
+    delete grafoLista;
 
     return 0;
 }
