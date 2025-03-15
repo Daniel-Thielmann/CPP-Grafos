@@ -5,7 +5,7 @@
 void Guloso::resolverTSPMatriz(const GrafoMatriz& grafo) {
     numCidades = grafo.getNumVertices(); // Obtém o número de cidades
     melhorRotaIndex = 0;  // Reseta o índice da melhor rota
-    menorCusto = numeric_limits<int>::max();
+    menorCusto = INT_MAX;
 
     // Testa todos os vértices como ponto inicial
     for (int verticeInicial = 0; verticeInicial < numCidades; verticeInicial++) {
@@ -20,7 +20,7 @@ void Guloso::resolverTSPMatriz(const GrafoMatriz& grafo) {
 
         for (int i = 1; i < numCidades; i++) {
             int proximo = -1;
-            int menorDistancia = numeric_limits<int>::max();
+            int menorDistancia = INT_MAX;
 
             int tamanho = 0;
             pair<int, int>* vizinhos = grafo.getArestas(atual, tamanho);  // Obtém vizinhos e pesos
@@ -85,7 +85,7 @@ void Guloso::resolverTSPMatriz(const GrafoMatriz& grafo) {
 void Guloso::resolverTSPLista(const GrafoLista& grafo) {
     numCidades = grafo.getNumVertices(); // Obtém o número de cidades
     melhorRotaIndex = 0;  // Reseta o índice da melhor rota
-    menorCusto = numeric_limits<int>::max();
+    menorCusto = INT_MAX;
 
     // Testa todos os vértices como ponto inicial
     for (int verticeInicial = 0; verticeInicial < numCidades; verticeInicial++) {
@@ -99,7 +99,7 @@ void Guloso::resolverTSPLista(const GrafoLista& grafo) {
 
         for (int i = 1; i < numCidades; i++) {
             int proximo = -1;
-            int menorDistancia = numeric_limits<int>::max();
+            int menorDistancia = INT_MAX;
 
             int tamanho = 0;
             pair<int, int>* vizinhos = grafo.getArestas(atual, tamanho);  // Obtém vizinhos e pesos
