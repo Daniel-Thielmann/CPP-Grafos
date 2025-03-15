@@ -48,29 +48,30 @@ void GrafoMatriz::carregarGrafo(const string& nomeArquivo) {
     arquivo.close();
 }
 
-std::pair<int, int>* GrafoMatriz::getArestas(int vertice, int& tamanho) const {
-    if (vertice < 0 || vertice >= static_cast<int>(matrizAdj.size())) { // Correção aqui
+pair<int, int>* GrafoMatriz::getArestas(int vertice, int& tamanho) const {
+    // Usando size_t para a comparação com matrizAdj.size()
+    if (vertice < 0 || static_cast<size_t>(vertice) >= matrizAdj.size()) {
         tamanho = 0;
         return nullptr;
     }
 
-    // Contar número de vizinhos
-    int count = 0;
-    for (size_t i = 0; i < matrizAdj.size(); i++) { // Correção aqui
-        if (matrizAdj[vertice][i] != -1) {
+    // Contar o número de vizinhos
+    size_t count = 0;
+    for (size_t i = 0; i < matrizAdj.size(); i++) {
+        if (matrizAdj[vertice][i] != 0) {
             count++;
         }
     }
 
     // Criar array dinâmico
-    std::pair<int, int>* vizinhos = new std::pair<int, int>[count];
+    pair<int, int>* vizinhos = new pair<int, int>[count];
     tamanho = count;
 
-    // Preencher array
-    int index = 0;
-    for (size_t i = 0; i < matrizAdj.size(); i++) { // Correção aqui
-        if (matrizAdj[vertice][i] != -1) {
-            vizinhos[index++] = {static_cast<int>(i), matrizAdj[vertice][i]};
+    // Preencher o array com vizinhos e pesos
+    size_t index = 0;
+    for (size_t i = 0; i < matrizAdj.size(); i++) {
+        if (matrizAdj[vertice][i] != 0) {
+            vizinhos[index++] = {i, matrizAdj[vertice][i]};
         }
     }
 

@@ -1,4 +1,4 @@
-#include "ListaAdj.h"
+#include "listaAdj.h"
 #include <iostream>
 
 using namespace std;
@@ -61,4 +61,33 @@ int ListaAdj::getCusto(int origem, int destino) const {
     }
 
     return -1; // Retorna -1 se não houver aresta entre origem e destino
+}
+
+// Retornar os vizinhos e pesos do vértice especificado
+std::pair<int, int>* ListaAdj::obterVizinhos(int vertice, int& tamanho) const {
+    if (vertice < 0 || vertice >= numVertices) {
+        tamanho = 0;
+        return nullptr;
+    }
+
+    // Contar número de vizinhos
+    int count = 0;
+    NoAdj* atual = lista[vertice];
+    while (atual) {
+        count++;
+        atual = atual->prox;
+    }
+
+    // Criar array dinâmico
+    std::pair<int, int>* vizinhos = new std::pair<int, int>[count];
+    tamanho = count;
+
+    // Preencher array com vizinhos e pesos
+    atual = lista[vertice];
+    for (int i = 0; i < count; i++) {
+        vizinhos[i] = {atual->destino, atual->peso};
+        atual = atual->prox;
+    }
+
+    return vizinhos;
 }

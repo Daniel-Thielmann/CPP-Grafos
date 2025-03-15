@@ -14,9 +14,8 @@ public:
     void adicionarAresta(int origem, int destino, int peso) override;
     void imprimirGrafo() const override;
     void carregarGrafo(const string& nomeArquivo) override;
-    pair<int, int>* getArestas(int vertice, int& tamanho) const;
-    int getNumVertices() const { return numVertices; }
-    int getPesoAresta(int i, int j) const { return matrizAdj[i][j]; }
+    pair<int, int>* getArestas(int vertice, int& tamanho) const override;
+    
 };
 
 #endif // GRAFO_MATRIZ_H
