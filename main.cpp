@@ -40,9 +40,15 @@ int main() {
     }
 
     int maxIterationsMatriz = 1000;
+
+    // Medindo o tempo de execução do GRASP reativo para o grafo matriz
+    clock_t startMatriz = clock();
     int* melhorRotaMatriz = reactiveGRASP(costMatrixMatriz, nMatriz, maxIterationsMatriz);
+    clock_t endMatriz = clock();
     double custoMelhorRotaMatriz = calculateCost(melhorRotaMatriz, nMatriz, costMatrixMatriz);
-    
+    double elapsedMatriz= double(endMatriz - startMatriz) / CLOCKS_PER_SEC;
+
+
     // Exibir resultados para o grafo matriz
     cout << "\n--- Resultado do GRASP Reativo com 2-Opt ---\n";
     cout << "\n--- Resultado para Grafo Matriz ---\n" << endl;
@@ -50,8 +56,8 @@ int main() {
     for (int i = 0; i <= nMatriz; i++) {
         cout << melhorRotaMatriz[i] << " ";
     }
-    cout << "\nCusto total: " << custoMelhorRotaMatriz << endl << endl;
-    
+    cout << "\nCusto total: " << custoMelhorRotaMatriz << endl;
+    cout << "Tempo de execução (Grafo Matriz): " << elapsedMatriz << " segundos" << endl << endl;
     // Liberação de memória para a matriz de custos (Grafo Matriz)
     delete[] melhorRotaMatriz;
     for (int i = 0; i < nMatriz; i++) {
@@ -76,9 +82,14 @@ int main() {
     }
    
     int maxIterationsLista = 1000;
+
+    // Medindo o tempo de execução do GRASP reativo para o grafo lista
+    clock_t startLista = clock();
     int* melhorRotaLista = reactiveGRASP(costMatrixLista, nLista, maxIterationsLista);
+    clock_t endLista = clock();
     double custoMelhorRotaLista = calculateCost(melhorRotaLista, nLista, costMatrixLista);
-   
+    double elapsedLista = double(endLista - startLista) / CLOCKS_PER_SEC;
+
     // Exibir resultados para o grafo lista
     cout << "\n--- Resultado do GRASP Reativo com 2-Opt ---\n";
     cout << "\n--- Resultado para Grafo Lista -> Lista de Adjacência ---\n";
@@ -87,6 +98,7 @@ int main() {
         cout << melhorRotaLista[i] << " ";
     }
     cout << "\nCusto total: " << custoMelhorRotaLista << endl;
+   cout << "Tempo de execução (Grafo Lista): " << elapsedLista << " segundos" << endl;
    
     // Liberação de memória para a matriz de custos (Grafo Lista)
     delete[] melhorRotaLista;
