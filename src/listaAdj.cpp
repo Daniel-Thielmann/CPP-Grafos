@@ -46,3 +46,38 @@ ListaAdj::~ListaAdj() {
     }
     delete[] lista;
 }
+
+int ListaAdj::getCusto(int origem, int destino) const {
+    NoAdj* atual = lista[origem]; // Supondo que `lista` seja um array de ponteiros para NoAdj
+    while (atual) {
+        if (atual->destino == destino) {
+            return atual->peso;
+        }
+        atual = atual->prox;
+    }
+    return -1; // Retorna -1 se não houver conexão entre os vértices
+}
+
+std::pair<int, int>* ListaAdj::obterVizinhos(int vertice, int& tamanho) const {
+    tamanho = 0;
+
+    // Conta o número de vizinhos
+    NoAdj* atual = lista[vertice];
+    while (atual) {
+        tamanho++;
+        atual = atual->prox;
+    }
+
+    // Aloca um array para armazenar os vizinhos
+    std::pair<int, int>* vizinhos = new std::pair<int, int>[tamanho];
+
+    // Preenche o array com os vizinhos
+    atual = lista[vertice];
+    for (int i = 0; i < tamanho; i++) {
+        vizinhos[i] = {atual->destino, atual->peso};
+        atual = atual->prox;
+    }
+
+    return vizinhos;
+}
+

@@ -17,12 +17,13 @@ private:
     int numVertices;
 
 public:
-    ListaAdj();  // ✅ Construtor padrão
+    ListaAdj();  
     ListaAdj(int numVertices);
     ~ListaAdj();
     void inserirAresta(int origem, int destino, int peso);
     void imprimir() const;
     std::pair<int, int>* obterVizinhos(int vertice, int& tamanho) const;
+    int getCusto(int origem, int destino) const;
 };
 
 #endif // LISTA_ADJ_H

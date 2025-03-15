@@ -64,3 +64,7 @@ void GrafoLista::carregarGrafo(const std::string& nomeArquivo) {
 std::pair<int, int>* GrafoLista::getArestas(int vertice, int& tamanho) const {
     return listaAdj->obterVizinhos(vertice, tamanho);
 }
+
+const ListaAdj& GrafoLista::getListaAdj() const {
+    return *listaAdj; // Supondo que listaAdj seja um ponteiro para a lista de adjacência
+}

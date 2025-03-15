@@ -16,7 +16,7 @@ private:
 
 
     // Definindo manualmente o valor máximo para um int
-    static const int INT_MAX = 2147483647;
+    static const int MAX_INT = 2147483647;
 
 public:
     Guloso() : melhorRota(nullptr), menorCusto(INT_MAX), numCidades(0), melhorRotaIndex(0) {}

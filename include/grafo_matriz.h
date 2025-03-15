@@ -5,17 +5,18 @@
 
 class GrafoMatriz : public Grafo {
 private:
-    vector<vector<int>> matrizAdj;
+    int** matrizAdj; // Matriz dinâmica para reduzir uso de memória
+    int numVertices;
 
 public:
     GrafoMatriz(int numVertices, bool direcionado, bool verticesPonderados, bool arestasPonderadas);
-    ~GrafoMatriz() {}
+    ~GrafoMatriz();
 
     void adicionarAresta(int origem, int destino, int peso) override;
     void imprimirGrafo() const override;
-    void carregarGrafo(const string& nomeArquivo) override;
-    pair<int, int>* getArestas(int vertice, int& tamanho) const override;
-    
+    void carregarGrafo(const std::string& nomeArquivo) override;
+    std::pair<int, int>* getArestas(int vertice, int& tamanho) const override;
+    int getPesoAresta(int origem, int destino) const;
 };
 
 #endif // GRAFO_MATRIZ_H

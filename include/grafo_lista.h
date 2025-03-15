@@ -17,6 +17,7 @@ public:
     void imprimirGrafo() const override;
     void carregarGrafo(const std::string& nomeArquivo) override;
     std::pair<int, int>* getArestas(int vertice, int& tamanho) const override;
+    const ListaAdj& getListaAdj() const;
 };
 
 #endif // GRAFO_LISTA_H
