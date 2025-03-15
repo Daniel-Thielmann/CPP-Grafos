@@ -46,3 +46,19 @@ ListaAdj::~ListaAdj() {
     }
     delete[] lista;
 }
+
+int ListaAdj::getCusto(int origem, int destino) const {
+    if (origem < 0 || origem >= numVertices || destino < 0 || destino >= numVertices) {
+        return -1; // Retorna -1 se os índices forem inválidos
+    }
+
+    NoAdj* atual = lista[origem];
+    while (atual) {
+        if (atual->destino == destino) {
+            return atual->peso; // Retorna o peso da aresta encontrada
+        }
+        atual = atual->prox;
+    }
+
+    return -1; // Retorna -1 se não houver aresta entre origem e destino
+}

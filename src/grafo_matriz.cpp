@@ -47,3 +47,32 @@ void GrafoMatriz::carregarGrafo(const string& nomeArquivo) {
     }
     arquivo.close();
 }
+
+std::pair<int, int>* GrafoMatriz::getArestas(int vertice, int& tamanho) const {
+    if (vertice < 0 || vertice >= static_cast<int>(matrizAdj.size())) { // Correção aqui
+        tamanho = 0;
+        return nullptr;
+    }
+
+    // Contar número de vizinhos
+    int count = 0;
+    for (size_t i = 0; i < matrizAdj.size(); i++) { // Correção aqui
+        if (matrizAdj[vertice][i] != -1) {
+            count++;
+        }
+    }
+
+    // Criar array dinâmico
+    std::pair<int, int>* vizinhos = new std::pair<int, int>[count];
+    tamanho = count;
+
+    // Preencher array
+    int index = 0;
+    for (size_t i = 0; i < matrizAdj.size(); i++) { // Correção aqui
+        if (matrizAdj[vertice][i] != -1) {
+            vizinhos[index++] = {static_cast<int>(i), matrizAdj[vertice][i]};
+        }
+    }
+
+    return vizinhos;
+}

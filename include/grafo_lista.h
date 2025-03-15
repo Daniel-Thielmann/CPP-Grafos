@@ -6,15 +6,17 @@
 
 class GrafoLista : public Grafo {
 private:
-    ListaAdj* listaAdj; // Vetor de listas encadeadas
+    ListaAdj listaAdj; // Agora é um único objeto (não um array)
 
 public:
     GrafoLista(int numVertices, bool direcionado, bool verticesPonderados, bool arestasPonderadas);
-    ~GrafoLista();
+    ~GrafoLista() {}
 
     void adicionarAresta(int origem, int destino, int peso) override;
     void imprimirGrafo() const override;
-    void carregarGrafo(const string& nomeArquivo) override;
+    void carregarGrafo(const std::string& nomeArquivo) override;
+    int getNumVertices() const { return numVertices; }
+    ListaAdj& getListaAdj() { return listaAdj; }
 };
 
 #endif // GRAFO_LISTA_H
