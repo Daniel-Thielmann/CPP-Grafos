@@ -8,3 +8,9 @@ Daniel Alves Thielmann:
 * grafo_lista.h, grafo_matriz.h, grafo.h, listaAdj.h, mtx_loader.h
 * grafo_lista.cpp, grafo_matriz.cpp, grafo.cpp, listaAdj.cpp, mtx_loader.cpp
 * main.cpp
+
+
+Michel Gomes de Andrade:
+- Arquivos criados:
+* algoritmorandomizado.h
+*algoritmorandomizado.cpp
