@@ -49,15 +49,17 @@ void processarGrafo(const string& arquivoEntrada) {
     cout << "[DEBUG] Tentando alocar matriz de custos para " << nMatriz << " vertices..." << endl;
     double** costMatrixMatriz = new double*[nMatriz];
 
-    for (int i = 0; i < nMatriz; i++) {
+   for (int i = 0; i < nMatriz; i++) {
         costMatrixMatriz[i] = new double[nMatriz];
         for (int j = 0; j < nMatriz; j++) {
-            cout << "[DEBUG] Pegando peso da aresta (" << i << "," << j << ")..." << endl;
+            if ((i * nMatriz + j) % 1000 == 0) { // Apenas a cada 1000 acessos
+                cout << "[DEBUG] Pegando peso da aresta (" << i << "," << j << ")..." << endl;
+            }
             int peso = grafoMatriz->getPesoAresta(i, j);
-            cout << "[DEBUG] Peso obtido: " << peso << endl;
             costMatrixMatriz[i][j] = (peso == -1) ? INF : peso;
         }
     }
+
     cout << "[DEBUG] Matriz de custos alocada com sucesso!" << endl;
 
     // Executando GRASP Reativo

@@ -7,7 +7,11 @@ void Guloso::resolverTSPMatriz(const GrafoMatriz& grafo) {
     melhorRotaIndex = 0;
     menorCusto = MAX_INT;
 
+    cout << "[DEBUG] Guloso iniciando com " << numCidades << " cidades..." << endl;
+
     for (int verticeInicial = 0; verticeInicial < numCidades; verticeInicial++) {
+        cout << "[DEBUG] Processando cidade inicial " << verticeInicial << "..." << endl;
+
         bool* visitado = new bool[numCidades]();
         int* caminho = new int[numCidades];
         int caminhoIndex = 0, custoTotal = 0, atual = verticeInicial;
@@ -16,6 +20,10 @@ void Guloso::resolverTSPMatriz(const GrafoMatriz& grafo) {
         visitado[verticeInicial] = true;
 
         for (int i = 1; i < numCidades; i++) {
+            if (i % 1000 == 0) {
+                cout << "[DEBUG] Iteracao " << i << " - Cidade atual: " << atual << endl;
+            }
+
             int proximo = -1, menorDistancia = MAX_INT;
             int tamanho = 0;
             pair<int, int>* vizinhos = grafo.getArestas(atual, tamanho);
@@ -33,6 +41,7 @@ void Guloso::resolverTSPMatriz(const GrafoMatriz& grafo) {
             delete[] vizinhos;
 
             if (proximo == -1) {
+                cout << "[ERRO] Nenhuma cidade disponivel para continuar o caminho!" << endl;
                 break;
             }
 
@@ -41,6 +50,8 @@ void Guloso::resolverTSPMatriz(const GrafoMatriz& grafo) {
             custoTotal += menorDistancia;
             atual = proximo;
         }
+
+        cout << "[DEBUG] Caminho fechado para cidade " << verticeInicial << ", custo: " << custoTotal << endl;
 
         int tamanho = 0;
         pair<int, int>* vizinhos = grafo.getArestas(atual, tamanho);
@@ -64,7 +75,10 @@ void Guloso::resolverTSPMatriz(const GrafoMatriz& grafo) {
         delete[] visitado;
         delete[] caminho;
     }
+
+    cout << "[DEBUG] Guloso finalizado. Melhor custo encontrado: " << menorCusto << endl;
 }
+
 
 void Guloso::resolverTSPLista(const GrafoLista& grafo) {
     numCidades = grafo.getNumVertices();
