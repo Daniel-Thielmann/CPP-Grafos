@@ -9,29 +9,28 @@ using namespace std;
 
 class Guloso {
 private:
-    int* melhorRota;   // Melhor rota encontrada (Agora um array dinâmico)
+    int* melhorRota;   // Melhor rota encontrada (array dinâmico)
     int menorCusto;    // Menor custo encontrado
     int numCidades;    // Número de cidades
     int melhorRotaIndex; // Índice para rastrear a melhor rota
 
-
-    // Definindo manualmente o valor máximo para um int
-    static const int MAX_INT = 2147483647;
+    static const int MAX_INT = 2147483647; // Define manualmente o valor máximo para um int
 
 public:
-    Guloso() : melhorRota(nullptr), menorCusto(INT_MAX), numCidades(0), melhorRotaIndex(0) {}
+    Guloso() : melhorRota(nullptr), menorCusto(MAX_INT), numCidades(0), melhorRotaIndex(0) {}
 
     ~Guloso() {
-        delete[] melhorRota;  // Libera a memória alocada dinamicamente
+        if (melhorRota) {
+            delete[] melhorRota;
+        }
     }
 
     void resolverTSPMatriz(const GrafoMatriz& grafo);
-    
     void resolverTSPLista(const GrafoLista& grafo);
-    
+
     int* getMelhorRota(int& tamanho) const;
     int getMenorCusto() const;
     int getNumCidades() const;
 };
 
-#endif
+#endif // GULOSO_H

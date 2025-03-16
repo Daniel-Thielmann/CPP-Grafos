@@ -71,3 +71,19 @@ const ListaAdj& GrafoLista::getListaAdj() const {
 int GrafoLista::obterDistancia (int cidade1, int cidade2) const{
     return cidade1 - cidade2;
 }
+
+int GrafoLista::getArestaPeso(int origem, int destino) const {
+    int tamanho = 0;
+    pair<int, int>* vizinhos = getArestas(origem, tamanho);
+
+    for (int i = 0; i < tamanho; i++) {
+        if (vizinhos[i].first == destino) {
+            int peso = vizinhos[i].second;
+            delete[] vizinhos; // Liberando memória
+            return peso;
+        }
+    }
+
+    delete[] vizinhos;
+    return -1; // Retorna -1 se não houver aresta
+}

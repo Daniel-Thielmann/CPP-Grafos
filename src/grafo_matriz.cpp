@@ -2,67 +2,67 @@
 #include <iostream>
 #include <fstream>
 #include <ctime>
-#include <cstring>  // Para memset
+#include <cstring>  
 
 using namespace std;
 
-// Construtor: inicializa a matriz de adjacência de forma otimizada
+// Construtor otimizado: inicializa a matriz de adjacência de forma compacta
 GrafoMatriz::GrafoMatriz(int numVertices, bool direcionado, bool verticesPonderados, bool arestasPonderadas)
     : Grafo(numVertices, direcionado, verticesPonderados, arestasPonderadas), numVertices(numVertices) {
 
-    cout << "[LOG] Inicializando matriz de adjacência para " << numVertices << " vértices..." << endl;
+    cout << "[LOG] Inicializando matriz de adjacencia compacta para " << numVertices << " vertices..." << endl;
 
-    // Aloca matriz unidimensional e bitmap de cache
-    matrizAdj = new int[numVertices * numVertices];
-    cacheArestas = new bool[numVertices * numVertices];
+    clock_t startAlloc = clock();  
 
-    // Inicializa com -1 e falso no cache
-    memset(matrizAdj, -1, numVertices * numVertices * sizeof(int));
-    memset(cacheArestas, false, numVertices * numVertices * sizeof(bool));
-
-    cout << "[LOG] Matriz e cache inicializados!" << endl;
+    matrizAdj = new int[numVertices * numVertices]();
+    
+    clock_t endAlloc = clock();
+    double tempoAlloc = double(endAlloc - startAlloc) / CLOCKS_PER_SEC;
+    cout << "[LOG] Matriz alocada e inicializada em " << tempoAlloc << " segundos." << endl;
 }
 
-// Destrutor: libera a memória alocada para a matriz
+// Destrutor: libera a memória alocada
 GrafoMatriz::~GrafoMatriz() {
-    cout << "[LOG] Liberando memória da matriz de adjacência..." << endl;
+    cout << "[LOG] Liberando memoria da matriz de adjacencia..." << endl;
     delete[] matrizAdj;
-    delete[] cacheArestas;
-    cout << "[LOG] Memória liberada com sucesso!" << endl;
+    cout << "[LOG] Memoria liberada com sucesso!" << endl;
 }
 
 // Adiciona uma aresta ao grafo
 void GrafoMatriz::adicionarAresta(int origem, int destino, int peso) {
     if (origem < 0 || origem >= numVertices || destino < 0 || destino >= numVertices) {
-        cerr << "[ERRO] Vértices fora do intervalo!" << endl;
+        cerr << "[ERRO] Índices inválidos na aresta: " << origem << " -> " << destino << endl;
         return;
     }
 
     int idx = origem * numVertices + destino;
     matrizAdj[idx] = peso;
-    cacheArestas[idx] = true;
 
     if (!ehDirecionado()) {
-        idx = destino * numVertices + origem;
-        matrizAdj[idx] = peso;
-        cacheArestas[idx] = true;
+        matrizAdj[destino * numVertices + origem] = peso;
     }
 }
 
 // Imprime a matriz de adjacência
 void GrafoMatriz::imprimirGrafo() const {
-    cout << "[LOG] Imprimindo matriz de adjacência:" << endl;
+    cout << "[LOG] Matriz de Adjacencia carregada para " << numVertices << " vertices." << endl;
+    
+    if (numVertices > 1000) {
+        cout << "[LOG] Matriz muito grande. Impressao omitida para evitar travamentos." << endl;
+        return;
+    }
+
     for (int i = 0; i < numVertices; i++) {
         for (int j = 0; j < numVertices; j++) {
             int idx = i * numVertices + j;
             int peso = matrizAdj[idx];
-            cout << (cacheArestas[idx] ? to_string(peso) : "∞") << "\t";
+            cout << (peso != 0 ? to_string(peso) : "∞") << "\t";
         }
         cout << endl;
     }
 }
 
-// Carrega o grafo a partir de um arquivo com otimização máxima
+// Otimização: Carrega o grafo de forma compacta e exibe progresso a cada 5.000 arestas
 void GrafoMatriz::carregarGrafo(const string& nomeArquivo) {
     cout << "[LOG] Iniciando leitura do arquivo: " << nomeArquivo << endl;
 
@@ -74,7 +74,7 @@ void GrafoMatriz::carregarGrafo(const string& nomeArquivo) {
 
     int n, d, vp, ap;
     arquivo >> n >> d >> vp >> ap;
-    cout << "[LOG] Arquivo lido com sucesso! Número de vértices: " << n << endl;
+    cout << "[LOG] Arquivo lido com sucesso! Numero de vertices: " << n << endl;
 
     this->numVertices = n;
     this->direcionado = d;
@@ -83,27 +83,20 @@ void GrafoMatriz::carregarGrafo(const string& nomeArquivo) {
 
     int origem, destino, peso;
     int totalArestas = 0;
-    long totalBytes = arquivo.seekg(0, ios::end).tellg();
-    arquivo.seekg(0, ios::beg);
-    long bytesLidos = arquivo.tellg();
-    int progresso = 0;
 
-    clock_t start = clock();  // Inicia medição de tempo
+    clock_t start = clock();  
 
     while (arquivo >> origem >> destino >> peso) {
         adicionarAresta(origem - 1, destino - 1, peso);
         totalArestas++;
 
-        // Atualiza progresso a cada 1%
-        bytesLidos = arquivo.tellg();
-        int novoProgresso = (bytesLidos * 100) / totalBytes;
-        if (novoProgresso > progresso) {
-            progresso = novoProgresso;
-            cout << "[LOG] " << progresso << "% do arquivo processado..." << endl;
+        // 🔥 Atualiza progresso a cada 5.000 arestas
+        if (totalArestas % 5000 == 0) {
+            cout << "[LOG] " << totalArestas << " arestas carregadas..." << endl;
         }
     }
 
-    clock_t end = clock();  // Finaliza medição de tempo
+    clock_t end = clock();
     double tempoGasto = double(end - start) / CLOCKS_PER_SEC;
 
     arquivo.close();
@@ -111,11 +104,24 @@ void GrafoMatriz::carregarGrafo(const string& nomeArquivo) {
     cout << "[LOG] Tempo total de carregamento: " << tempoGasto << " segundos" << endl;
 }
 
+
 // Retorna o peso de uma aresta
-int GrafoMatriz::getPesoAresta(int origem, int destino) const {
+    int GrafoMatriz::getPesoAresta(int origem, int destino) const {
+    if (origem < 0 || origem >= numVertices || destino < 0 || destino >= numVertices) {
+        cerr << "[ERRO] Indice invalido em getPesoAresta(): " << origem << " -> " << destino << endl;
+        return -1; // Retornar um valor invalido seguro
+    }
+    
     int idx = origem * numVertices + destino;
-    return cacheArestas[idx] ? matrizAdj[idx] : -1;
+    
+    if (!matrizAdj) {
+        cerr << "[ERRO] Matriz de Adjacencia nao alocada corretamente!" << endl;
+        return -1;
+    }
+
+    return matrizAdj[idx];
 }
+
 
 // Retorna a distância entre duas cidades
 int GrafoMatriz::obterDistancia(int cidade1, int cidade2) const {
@@ -127,6 +133,7 @@ int GrafoMatriz::obterNumCidades() const {
     return numVertices;
 }
 
+// Retorna as arestas de um vértice
 std::pair<int, int>* GrafoMatriz::getArestas(int vertice, int& tamanho) const {
     if (vertice < 0 || vertice >= numVertices) {
         tamanho = 0;
@@ -153,3 +160,4 @@ std::pair<int, int>* GrafoMatriz::getArestas(int vertice, int& tamanho) const {
 
     return vizinhos;
 }
+

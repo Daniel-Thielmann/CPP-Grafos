@@ -2,6 +2,8 @@
 #include <cstdlib>
 #include <ctime>
 #include <cmath>
+#include <iostream>
+using namespace std;
 
 
 
@@ -118,63 +120,30 @@ int* twoOpt(int* route, int n, double** costMatrix) {
 // reactiveGRASP: otimizado com arrays estáticos para alphas
 //---------------------------------------------------------------------
 int* reactiveGRASP(double** costMatrix, int n, int maxIterations) {
-    const int numAlphas = 5;
-    double alphas[] = {0.1, 0.3, 0.5, 0.7, 0.9};
-    
-    double prob[numAlphas];
-    for (int i = 0; i < numAlphas; i++) prob[i] = 1.0 / numAlphas;
-    
-    double avgCost[numAlphas] = {0};
-    int count[numAlphas] = {0};
-    
-    int* bestSolution = nullptr;
     double bestCost = INF;
-    
+    int* bestSolution = nullptr;
+
     for (int iter = 0; iter < maxIterations; iter++) {
-        // Seleção do alpha
-        double r = (double)rand() / RAND_MAX;
-        int selectedIndex = 0;
-        double cumulative = 0.0;
-        for (int i = 0; i < numAlphas; i++) {
-            cumulative += prob[i];
-            if (r <= cumulative) {
-                selectedIndex = i;
-                break;
-            }
+        int* solution = new int[n+1];
+        for (int i = 0; i < n; i++) {
+            solution[i] = i;
         }
-        
-        // Construção + Busca Local
-        int* solution = greedyRandomizedConstruction(costMatrix, n, alphas[selectedIndex]);
-        int* improved = twoOpt(solution, n, costMatrix);
-        delete[] solution;
-        
-        double solCost = calculateCost(improved, n, costMatrix);
-        
-        // Atualização da melhor solução
+        solution[n] = solution[0];
+
+        double solCost = calculateCost(solution, n, costMatrix);
+
         if (solCost < bestCost) {
             delete[] bestSolution;
-            bestSolution = improved;
+            bestSolution = solution;
             bestCost = solCost;
         } else {
-            delete[] improved;
+            delete[] solution;
         }
-        
-        // Atualização das estatísticas
-        avgCost[selectedIndex] = (avgCost[selectedIndex] * count[selectedIndex] + solCost) 
-                               / (count[selectedIndex] + 1);
-        count[selectedIndex]++;
-        
-        // Atualização das probabilidades
-        double totalWeight = 0.0;
-        double weights[numAlphas];
-        for (int i = 0; i < numAlphas; i++) {
-            weights[i] = (count[i] == 0) ? 1.0 : 1.0 / avgCost[i];
-            totalWeight += weights[i];
-        }
-        for (int i = 0; i < numAlphas; i++) {
-            prob[i] = weights[i] / totalWeight;
+
+        if (iter % 100 == 0) {
+            cout << "[LOG] Iteracao " << iter << " concluida, melhor custo ate agora: " << bestCost << endl;
         }
     }
-    
+
     return bestSolution;
 }

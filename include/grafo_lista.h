@@ -19,6 +19,7 @@ public:
     std::pair<int, int>* getArestas(int vertice, int& tamanho) const override;
     const ListaAdj& getListaAdj() const;
     int obterDistancia(int cidade1, int cidade2) const override;
+    int getArestaPeso(int origem, int destino) const;
 };
 
 #endif // GRAFO_LISTA_H

@@ -6,10 +6,10 @@
 // Classe que implementa um algoritmo randomizado para o problema do Caixeiro Viajante
 class GrafoRandomizado {
 private:
-    const Grafo& grafo; // Referência para o grafo
-    int* melhorRota;    // Armazena a melhor rota encontrada (array dinâmico)
-    int menorCusto;     // Armazena o menor custo encontrado
-    int numCidades;     // Armazena o número de cidades no grafo
+    const Grafo& grafo; // PRIMEIRO: Referência para o grafo
+    int* melhorRota;    // SEGUNDO: Melhor rota encontrada (array dinâmico)
+    int menorCusto;     // TERCEIRO: Menor custo encontrado
+    int numCidades;     // QUARTO: Número de cidades no grafo
 
 public:
     GrafoRandomizado(const Grafo& g);  // Construtor
@@ -18,4 +18,4 @@ public:
     void exibirMelhorRota() const;     // Exibe a melhor rota encontrada e seu custo
 };
 
-#endif
+#endif // GRAFORANDOMIZADO_H

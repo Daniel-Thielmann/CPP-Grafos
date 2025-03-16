@@ -24,7 +24,7 @@ void ListaAdj::inserirAresta(int origem, int destino, int peso) {
 // ✅ Método para imprimir o grafo
 void ListaAdj::imprimir() const {
     for (int i = 0; i < numVertices; i++) {
-        cout << "Vértice " << i << ": ";
+        cout << "Vertice " << i << ": ";
         NoAdj* atual = lista[i];
         while (atual) {
             cout << " -> " << atual->destino << "(" << atual->peso << ")";
@@ -34,7 +34,7 @@ void ListaAdj::imprimir() const {
     }
 }
 
-// ✅ Destrutor para liberar memória
+//  Destrutor para liberar memória
 ListaAdj::~ListaAdj() {
     for (int i = 0; i < numVertices; i++) {
         NoAdj* atual = lista[i];
