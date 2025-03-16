@@ -15,6 +15,8 @@ public:
     void adicionarAresta(int origem, int destino, int peso) override;
     void imprimirGrafo() const override;
     void carregarGrafo(const string& nomeArquivo) override;
+
+    int obterDistancia(int cidade1, int cidade2) const override;
 };
 
 #endif // GRAFO_LISTA_H
