@@ -18,16 +18,13 @@ class ListaAdj {
         int numVertices;
     
     public:
-
-   
-
-
         ListaAdj();
         ListaAdj(int numVertices);
         void inserirAresta(int origem, int destino, int peso);
         void imprimir() const;
         int getCusto(int origem, int destino) const; // Novo método
         ~ListaAdj();
+        std::pair<int, int>* obterVizinhos(int vertice, int& tamanho) const;
     };
 
 #endif // LISTA_ADJ_H

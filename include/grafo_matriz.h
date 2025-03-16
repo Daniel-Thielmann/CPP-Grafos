@@ -17,6 +17,8 @@ public:
     void carregarGrafo(const std::string& nomeArquivo) override;
     std::pair<int, int>* getArestas(int vertice, int& tamanho) const override;
     int getPesoAresta(int origem, int destino) const;
+    int obterDistancia(int cidade1, int cidade2) const override;
+    int obterNumCidades() const;
 };
 
 #endif // GRAFO_MATRIZ_H

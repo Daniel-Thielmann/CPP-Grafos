@@ -127,3 +127,7 @@ std::pair<int, int>* GrafoMatriz::getArestas(int vertice, int& tamanho) const {
 int GrafoMatriz::getPesoAresta(int origem, int destino) const {
     return (matrizAdj[origem] ? matrizAdj[origem][destino] : -1);
 }
+
+int GrafoMatriz::obterDistancia (int cidade1, int cidade2) const{
+    return matrizAdj[cidade1][cidade2];
+}

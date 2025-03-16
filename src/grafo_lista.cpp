@@ -68,3 +68,6 @@ std::pair<int, int>* GrafoLista::getArestas(int vertice, int& tamanho) const {
 const ListaAdj& GrafoLista::getListaAdj() const {
     return *listaAdj; // Supondo que listaAdj seja um ponteiro para a lista de adjacência
 }
+int GrafoLista::obterDistancia (int cidade1, int cidade2) const{
+    return cidade1 - cidade2;
+}
