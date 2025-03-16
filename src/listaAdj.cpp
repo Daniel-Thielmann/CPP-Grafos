@@ -5,7 +5,7 @@ using namespace std;
 
 // ✅ Construtor padrão (evita erros de inicialização sem argumentos)
 ListaAdj::ListaAdj() : lista(nullptr), numVertices(0) {}
-
+/*
 // ✅ Construtor correto (inicializa lista de adjacência)
 ListaAdj::ListaAdj(int numVertices) : numVertices(numVertices) {
     lista = new NoAdj*[numVertices];
@@ -13,13 +13,30 @@ ListaAdj::ListaAdj(int numVertices) : numVertices(numVertices) {
         lista[i] = nullptr;
     }
 }
+*/
 
+/*
 // ✅ Método para inserir uma aresta na lista de adjacência
 void ListaAdj::inserirAresta(int origem, int destino, int peso) {
     NoAdj* novo = new NoAdj(destino, peso);
     novo->prox = lista[origem];
     lista[origem] = novo;
 }
+
+*/
+void ListaAdj::inserirAresta(int origem, int destino, int peso) {
+    NoAdj* novo = new NoAdj(destino, peso);
+    novo->prox = lista[origem];
+    lista[origem] = novo;
+    
+    // Atualiza a matriz de custos
+    if (origem >= 0 && origem < numVertices && destino >= 0 && destino < numVertices) {
+        costMatrix[origem][destino] = peso;
+    }
+}
+
+
+
 
 // ✅ Método para imprimir o grafo
 void ListaAdj::imprimir() const {
@@ -47,6 +64,7 @@ ListaAdj::~ListaAdj() {
     delete[] lista;
 }
 
+/*
 int ListaAdj::getCusto(int origem, int destino) const {
     if (origem < 0 || origem >= numVertices || destino < 0 || destino >= numVertices) {
         return -1; // Retorna -1 se os índices forem inválidos
@@ -62,3 +80,38 @@ int ListaAdj::getCusto(int origem, int destino) const {
 
     return -1; // Retorna -1 se não houver aresta entre origem e destino
 }
+*/
+
+
+
+
+
+
+/*
+
+ListaAdj::ListaAdj(int numVertices) : numVertices(numVertices) {
+    lista = new NoAdj*[numVertices]();
+    buildCostMatrix(); // Construir matriz ao inicializar
+}
+*/
+
+ListaAdj::ListaAdj(int numVertices) : numVertices(numVertices) {
+    lista = new NoAdj*[numVertices]();
+    costMatrix = new int*[numVertices];
+    for (int i = 0; i < numVertices; ++i) {
+        costMatrix[i] = new int[numVertices];
+        for (int j = 0; j < numVertices; ++j) {
+            costMatrix[i][j] = -1;
+        }
+    }
+}
+
+
+int ListaAdj::getCusto(int origem, int destino) const {
+    if (origem >= 0 && origem < numVertices && destino >= 0 && destino < numVertices)
+        return costMatrix[origem][destino];
+    return -1;
+}
+
+
+

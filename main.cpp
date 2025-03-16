@@ -18,7 +18,7 @@ int main() {
     GrafoMatriz* grafoMatriz = nullptr;
     GrafoLista* grafoLista = nullptr;
 
-    string arquivo = "entradas/grafo_100.mtx";
+    string arquivo = "entradas/grafo_5000_nos.mtx";
     cout << "Tentando carregar o arquivo: " << arquivo << endl;
     
     MTXLoader::carregarMTX(arquivo, grafoMatriz, grafoLista);
@@ -39,7 +39,7 @@ int main() {
         }
     }
 
-    int maxIterationsMatriz = 1000;
+    int maxIterationsMatriz = 20;
 
     // Medindo o tempo de execução do GRASP reativo para o grafo matriz
     clock_t startMatriz = clock();
@@ -81,7 +81,7 @@ int main() {
         }
     }
    
-    int maxIterationsLista = 1000;
+    int maxIterationsLista = 20;
 
     // Medindo o tempo de execução do GRASP reativo para o grafo lista
     clock_t startLista = clock();

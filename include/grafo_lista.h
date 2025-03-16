@@ -16,7 +16,8 @@ public:
     void imprimirGrafo() const override;
     void carregarGrafo(const std::string& nomeArquivo) override;
     int getNumVertices() const { return numVertices; }
-    ListaAdj& getListaAdj() { return listaAdj; }
+    const ListaAdj& getListaAdj() const { return listaAdj; } // Adicione esta linha
+   // ListaAdj& getListaAdj() { return listaAdj; } // Mantenha a versão não-const se necessário
 };
 
 #endif // GRAFO_LISTA_H

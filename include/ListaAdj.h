@@ -1,7 +1,6 @@
+// ListaAdj.h
 #ifndef LISTA_ADJ_H
 #define LISTA_ADJ_H
-
-#include <iostream>
 
 struct NoAdj {
     int destino;
@@ -11,23 +10,34 @@ struct NoAdj {
 };
 
 class ListaAdj {
+private:
+    NoAdj** lista;
+    int numVertices;
+    int** costMatrix; // Cache da matriz de custos
 
-    private:
+    void buildCostMatrix() {
+        costMatrix = new int*[numVertices];
+        for (int i = 0; i < numVertices; ++i) {
+            costMatrix[i] = new int[numVertices];
+            for (int j = 0; j < numVertices; ++j) {
+                costMatrix[i][j] = -1;
+            }
+            NoAdj* atual = lista[i];
+            while (atual) {
+                costMatrix[i][atual->destino] = atual->peso;
+                atual = atual->prox;
+            }
+        }
+    }
+
+public:
+    ListaAdj();
+    explicit ListaAdj(int numVertices);
+    ~ListaAdj();
     
-        NoAdj** lista;
-        int numVertices;
-    
-    public:
-
-   
-
-
-        ListaAdj();
-        ListaAdj(int numVertices);
-        void inserirAresta(int origem, int destino, int peso);
-        void imprimir() const;
-        int getCusto(int origem, int destino) const; // Novo método
-        ~ListaAdj();
-    };
+    void inserirAresta(int origem, int destino, int peso);
+    int getCusto(int origem, int destino) const;
+    void imprimir() const;
+};
 
 #endif // LISTA_ADJ_H
