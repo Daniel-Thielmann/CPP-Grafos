@@ -1,43 +1,35 @@
 #include <iostream>
-#include "./include/grafo_matriz.h"
-#include "./include/ListaAdj.h"
-#include "./include/grafo_lista.h"
-#include "reativo.h"
+#include <fstream>
+#include <cstdlib>
+#include <ctime>
+#include "grafo_matriz.h"
+#include "grafo_lista.h"
 #include "tsp_loader.h"
+#include "reativo.h"
 
 using namespace std;
 
-int main(int argc, char* argv[]) {
-    cout << "Iniciando o programa!" << endl;
+void processarGrafo(const string& arquivoEntrada) {
+    cout << "[LOG] Iniciando processamento do grafo: " << arquivoEntrada << endl;
 
-    // Verifica se os argumentos foram passados corretamente
-    if (argc < 4) {
-        cout << "Uso incorreto! O formato correto é:" << endl;
-        cout << "./main.out -p -m <arquivo_de_entrada>" << endl;
-        return 1;
-    }
-
-    // Usa o arquivo passado na linha de comando
-    string arquivo = argv[3];
-    cout << "Tentando carregar o arquivo: " << arquivo << endl;
-
-    // Ponteiros para os grafos
+    // Criando ponteiros para os grafos
     GrafoMatriz* grafoMatriz = nullptr;
     GrafoLista* grafoLista = nullptr;
 
-    // Carregar o grafo a partir do arquivo .tsp
-    TSPLoader::carregarTSP(arquivo, grafoMatriz, grafoLista);
+    // Carregar o grafo da instância TSP
+    TSPLoader::carregarTSP(arquivoEntrada, grafoMatriz, grafoLista);
 
     if (!grafoMatriz || !grafoLista) {
-        cout << "Erro ao carregar o grafo." << endl;
-        return 1;
+        cerr << "[ERRO] Falha ao carregar o grafo." << endl;
+        return;
     }
 
-    cout << "Grafo carregado com sucesso!" << endl;
+    // Definição de infinito para cálculos
+    const int INF = 1e9;
 
-    /////////////////////////////// GRAFO MATRIZ /////////////////////////////////////
-    cout << "\nGrafo Matriz:" << endl;
-    const double INF = 1e9;
+    // ==================== PROCESSAMENTO DO GRAFO MATRIZ ====================
+
+    cout << "[LOG] Iniciando processamento com Grafo Matriz..." << endl;
     int nMatriz = grafoMatriz->getNumVertices();
     double** costMatrixMatriz = new double*[nMatriz];
 
@@ -53,21 +45,26 @@ int main(int argc, char* argv[]) {
     clock_t startMatriz = clock();
     int* melhorRotaMatriz = reactiveGRASP(costMatrixMatriz, nMatriz, maxIterationsMatriz);
     clock_t endMatriz = clock();
+
     double custoMelhorRotaMatriz = calculateCost(melhorRotaMatriz, nMatriz, costMatrixMatriz);
     double elapsedMatriz = double(endMatriz - startMatriz) / CLOCKS_PER_SEC;
 
-    cout << "\n--- Resultado do GRASP Reativo com 2-Opt ---" << endl;
-    cout << "Melhor rota (Grafo Matriz): ";
-    for (int i = 0; i <= nMatriz; i++) cout << melhorRotaMatriz[i] << " ";
-    cout << "\nCusto total: " << custoMelhorRotaMatriz;
-    cout << "\nTempo de execução: " << elapsedMatriz << " segundos\n";
+    cout << "[LOG] Melhor rota (Matriz): ";
+    for (int i = 0; i <= nMatriz; i++) {
+        cout << melhorRotaMatriz[i] << " ";
+    }
+    cout << "\nCusto total: " << custoMelhorRotaMatriz << endl;
+    cout << "Tempo de execução (Matriz): " << elapsedMatriz << " segundos" << endl;
 
     delete[] melhorRotaMatriz;
-    for (int i = 0; i < nMatriz; i++) delete[] costMatrixMatriz[i];
+    for (int i = 0; i < nMatriz; i++) {
+        delete[] costMatrixMatriz[i];
+    }
     delete[] costMatrixMatriz;
 
-    /////////////////////////////// GRAFO LISTA /////////////////////////////////////
-    cout << "\nGrafo Lista:" << endl;
+    // ==================== PROCESSAMENTO DO GRAFO LISTA ====================
+
+    cout << "[LOG] Iniciando processamento com Grafo Lista..." << endl;
     int nLista = grafoLista->getNumVertices();
     double** costMatrixLista = new double*[nLista];
 
@@ -83,21 +80,45 @@ int main(int argc, char* argv[]) {
     clock_t startLista = clock();
     int* melhorRotaLista = reactiveGRASP(costMatrixLista, nLista, maxIterationsLista);
     clock_t endLista = clock();
+
     double custoMelhorRotaLista = calculateCost(melhorRotaLista, nLista, costMatrixLista);
     double elapsedLista = double(endLista - startLista) / CLOCKS_PER_SEC;
 
-    cout << "\n--- Resultado do GRASP Reativo com 2-Opt ---" << endl;
-    cout << "Melhor rota (Grafo Lista): ";
-    for (int i = 0; i <= nLista; i++) cout << melhorRotaLista[i] << " ";
-    cout << "\nCusto total: " << custoMelhorRotaLista;
-    cout << "\nTempo de execução: " << elapsedLista << " segundos\n";
+    cout << "[LOG] Melhor rota (Lista): ";
+    for (int i = 0; i <= nLista; i++) {
+        cout << melhorRotaLista[i] << " ";
+    }
+    cout << "\nCusto total: " << custoMelhorRotaLista << endl;
+    cout << "Tempo de execução (Lista): " << elapsedLista << " segundos" << endl;
 
     delete[] melhorRotaLista;
-    for (int i = 0; i < nLista; i++) delete[] costMatrixLista[i];
+    for (int i = 0; i < nLista; i++) {
+        delete[] costMatrixLista[i];
+    }
     delete[] costMatrixLista;
 
     delete grafoMatriz;
     delete grafoLista;
+
+    cout << "[LOG] Processamento concluído!" << endl;
+}
+
+int main(int argc, char* argv[]) {
+    if (argc < 3) {
+        cerr << "[ERRO] Uso incorreto! Formato: ./main.exe -p -m <arquivo_tsp>" << endl;
+        return 1;
+    }
+
+    string flag1 = argv[1];
+    string flag2 = argv[2];
+
+    if (flag1 == "-p" && flag2 == "-m" && argc == 4) {
+        string arquivoEntrada = argv[3];
+        processarGrafo(arquivoEntrada);
+    } else {
+        cerr << "[ERRO] Opções inválidas!" << endl;
+        return 1;
+    }
 
     return 0;
 }

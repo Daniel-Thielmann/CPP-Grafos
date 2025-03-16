@@ -2,10 +2,15 @@
 #define GRAFO_MATRIZ_H
 
 #include "grafo.h"
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <cstring>  // Para memset
 
 class GrafoMatriz : public Grafo {
 private:
-    int** matrizAdj; // Matriz dinâmica para reduzir uso de memória
+    int* matrizAdj;   // Matriz compacta em array unidimensional
+    bool* cacheArestas; // Bitmap para verificar se uma aresta existe sem acessar diretamente a matriz
     int numVertices;
 
 public:

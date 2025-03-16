@@ -24,3 +24,7 @@ bool Grafo::temVerticesPonderados() const {
 bool Grafo::temArestasPonderadas() const {
     return arestasPonderadas;
 }
+
+int Grafo::obterNumCidades() const {
+    return numVertices;  // Retorna o número total de vértices do grafo
+}

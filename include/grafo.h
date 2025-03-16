@@ -40,6 +40,7 @@ public:
     //~Grafo();  */                            // Destrutor para liberar memória alocada
     //void adicionarAresta(int cidade1, int cidade2, int distancia);
     virtual int obterDistancia(int cidade1, int cidade2 ) const = 0;
+    int obterNumCidades() const;
     //int obterNumCidades() const;*/
 };
 
