@@ -24,3 +24,6 @@ bool Grafo::temVerticesPonderados() const {
 bool Grafo::temArestasPonderadas() const {
     return arestasPonderadas;
 }
+
+
+

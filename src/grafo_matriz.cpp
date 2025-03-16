@@ -47,3 +47,7 @@ void GrafoMatriz::carregarGrafo(const string& nomeArquivo) {
     }
     arquivo.close();
 }
+
+int GrafoMatriz::obterDistancia (int cidade1, int cidade2) const{
+    return matrizAdj[cidade1][cidade2];
+}

@@ -61,3 +61,7 @@ void GrafoLista::carregarGrafo(const string& nomeArquivo) {
     }
     arquivo.close();
 }
+
+int GrafoLista::obterDistancia (int cidade1, int cidade2) const{
+    return cidade1 - cidade2;
+}
