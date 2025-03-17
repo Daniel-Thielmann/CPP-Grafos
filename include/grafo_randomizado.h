@@ -1,7 +1,7 @@
 #ifndef GRAFORANDOMIZADO_H
 #define GRAFORANDOMIZADO_H
 
-#include "Grafo.h"
+#include "grafo.h"
 
 class GrafoRandomizado {
 private:

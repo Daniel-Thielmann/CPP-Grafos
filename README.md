@@ -85,7 +85,7 @@ g++ -o main.exe main.cpp src/*.cpp -I./include -g -Wall -Werror
 Para rodar o programa e processar uma instância:
 
 ```bash
-./main.exe -p -m entradas/instancias/road-usroads.mtx
+./main.exe -p -m entradas/instancias/pla85900.mtx
 ```
 
 ### **Teste de Memória com Valgrind**
@@ -93,7 +93,7 @@ Para rodar o programa e processar uma instância:
 Para verificar vazamentos de memória:
 
 ```bash
-valgrind ./main.exe -p -m entradas/instancias/road-usroads.mtx
+valgrind ./main.exe -p -m entradas/instancias/pla85900.mtx
 ```
 
 ---

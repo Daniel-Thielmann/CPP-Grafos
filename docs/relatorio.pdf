@@ -7,8 +7,8 @@ Grupo 11 - Integrantes:
 
 Nome Daniel Alves Thielmann - Matrícula 202165020AB
 Nome Gabriel Duque Schiffner Oliveira - Matrícula 201965033AB
-Nome 3 - Matrícula XXXXX
 Nome Michel Gomes de Andrade - Matrícula 201876037
+Nome Kauê Oliveira Paraízo Garcia - Matrícula 202265517B
 
 1. Descrição do Problema
 O problema abordado neste trabalho é o Problema do Caixeiro Viajante (TSP - Traveling Salesman Problem), um problema clássico da teoria dos grafos e da otimização combinatória. O TSP pode ser formulado da seguinte maneira:
@@ -18,45 +18,138 @@ Formalmente, o TSP é um problema de encontrar o ciclo Hamiltoniano de menor pes
 Esse problema é NP-completo, o que significa que não existe um algoritmo eficiente que resolva todas as instâncias do problema em tempo polinomial, a menos que P = NP. Portanto, utilizamos heurísticas e algoritmos aproximativos para encontrar boas soluções dentro de um tempo viável.
 
 2. Descrição das Instâncias
-Para testar os algoritmos implementados, foram utilizadas 10 instâncias do TSP representando redes rodoviárias reais, extraídas da NetworkRepository do banco de dados Road Networks.
+Para testar os algoritmos implementados, foram utilizadas 10 instâncias do TSP representando redes rodoviárias, extraídas do site Comot do banco de dados da Universidade de Heidelberg.
 
-2.1 Site para download das instancias: https://networkrepository.com/road.php
+2.1 Site para download das instancias: http://comopt.ifi.uni-heidelberg.de/software/TSPLIB95/tsp/
 
 As instâncias utilizadas foram:
 
-road-asia-osm.mtx → Rede rodoviária da Ásia
-road-belgium-osm.mtx → Rede rodoviária da Bélgica
-road-germany-osm.mtx → Rede rodoviária da Alemanha
-road-great-britain-osm.mtx → Rede rodoviária do Reino Unido
-road-italy-osm.edges → Rede rodoviária da Itália
-road-luxembourg-osm.mtx → Rede rodoviária de Luxemburgo
-road-netherlands-osm.mtx → Rede rodoviária dos Países Baixos
-road-roadNet-CA.mtx → Rede rodoviária da Califórnia (EUA)
-road-roadNet-PA.mtx → Rede rodoviária da Pensilvânia (EUA)
-road-usroads.mtx → Rede rodoviária dos Estados Unidos
+brd14051.tsp               
+d15112.tsp                      
+d18512.tsp                     
+pla33810.tsp                     
+pla7397.tsp                     
+pla85900.tsp                      
+rl11849.tsp                    
+rl5915.tsp                         
+rl5934.tsp                    
+usa13509.tsp 
 
-Essas instâncias representam redes reais, onde os vértices correspondem a interseções rodoviárias e as arestas representam estradas conectando essas interseções.
+Os arquivos foram processados utilizando um leitor de arquivos .tsp, que converteu os dados para estruturas adequadas para os algoritmos implementados.
 
-Os arquivos foram processados utilizando um leitor de arquivos .mtx, que converteu os dados para estruturas adequadas para os algoritmos implementados.
-
-3. Descrição dos Métodos Implementados (20 pontos)
+3. Descrição dos Métodos Implementados 
 Foram implementadas três abordagens distintas para resolver o problema:
 
 * Algoritmo Guloso
-O algoritmo guloso segue uma estratégia de construção simples: começa em uma cidade e sempre escolhe a cidade mais próxima ainda não visitada.
-Vantagens: rápido, solução razoável para instâncias pequenas.
-Desvantagens: pode gerar soluções muito ruins para grafos densos.
+A implementação do algoritmo guloso para o Problema do Caixeiro Viajante (TSP) foi desenvolvida com base em uma heurística simples, mas eficaz, que prioriza a visita ao nó/cidade mais próximo que ainda não foi visitado.
+Essa abordagem garante que todas as cidades sejam visitadas, retornando uma sequência de locais a serem percorridos e o custo total da distância mínima percorrida.
+A solução foi estruturada em uma classe chamada "Guloso", que foi dividida em dois arquivos: um arquivo de cabeçalho (.h) contendo a descrição da classe e um arquivo de implementação (.cpp) contendo a lógica do algoritmo.
+A classe armazena informações importantes, como o número de cidades, a melhor rota encontrada e o custo total dessa rota.
+
+A classe "Guloso" é composta por dois métodos principais: resolverTSPMatriz e resolverTSPLista. Ambos os métodos implementam a mesma heurística, mas são projetados para trabalhar com diferentes estruturas de grafos: matriz de adjacência e lista de adjacência, respectivamente.
+A heurística gulosa funciona da seguinte forma: a partir de um vértice inicial, o algoritmo seleciona repetidamente o vizinho mais próximo que ainda não foi visitado, adicionando-o à rota e atualizando o custo total.
+Esse processo é repetido até que todas as cidades tenham sido visitadas. Ao final, o algoritmo retorna ao ponto de partida, completando o ciclo. Além disso, a classe inclui métodos getters para retornar os valores calculados, como a melhor rota, o menor custo e o número de cidades.
+
+A complexidade do algoritmo é alta, principalmente devido à necessidade de buscar o vizinho mais próximo em cada iteração e evitar a repetição de nós já visitados.
+Para grafos representados por matrizes de adjacência, a complexidade é O(n²), onde n é o número de cidades, pois é necessário percorrer todas as arestas para encontrar o vizinho mais próximo.
+Embora o algoritmo seja eficiente para instâncias pequenas ou moderadas do TSP, ele não é escalável para grafos muito grandes, onde o tempo de execução e o custo computacional podem se tornar proibitivos.
+
+Um dos principais problemas do algoritmo guloso é que ele não garante a solução ótima. A heurística de escolher sempre o vizinho mais próximo pode levar a decisões localmente ótimas que, no entanto, resultam em uma rota globalmente distante do ideal.
+Por exemplo, em alguns casos, a escolha do caminho mais curto em uma etapa inicial pode forçar o algoritmo a tomar caminhos muito longos em etapas posteriores, aumentando o custo total da rota.
+Além disso, o algoritmo é sensível à escolha do vértice inicial, o que pode levar a resultados diferentes dependendo do ponto de partida.
+
+Em resumo, o algoritmo guloso implementado é uma solução simples e direta para o TSP, adequada para instâncias pequenas ou moderadas do problema. Ele oferece uma boa relação entre simplicidade e eficácia, mas não é recomendado para grafos muito grandes ou para situações onde a solução ótima é essencial.
+Para melhorar o desempenho e a qualidade das soluções, seria interessante explorar abordagens híbridas, combinando a heurística gulosa com outras técnicas de otimização, como busca local ou meta-heurísticas.
+Além disso, a implementação poderia ser aprimorada com a adição de funcionalidades como a escolha dinâmica do vértice inicial ou a integração com estruturas de dados mais eficientes para reduzir o tempo de execução e o consumo de memória.
+
 * Algoritmo Randomizado
-Baseado na técnica de aleatorização, onde um subconjunto de possíveis caminhos é explorado.
-Em cada iteração, o algoritmo escolhe aleatoriamente entre os K vizinhos mais próximos.
-Essa aleatoriedade ajuda a escapar de mínimos locais.
+
+O Problema do Caixeiro Viajante (TSP - Traveling Salesman Problem) é um dos problemas clássicos de otimização combinatória. O objetivo é determinar a menor rota possível para um vendedor (caixeiro) que precisa visitar um conjunto de cidades, uma vez, e retornar à cidade inicial.
+Esse problema é NP-difícil, o que significa que, à medida que o número de cidades aumenta, o número de possíveis soluções cresce de maneira exponencial, tornando a busca pela solução ótima computacionalmente impraticável para grandes instâncias.
+Portanto, heurísticas e algoritmos aproximados, como o algoritmo randomizado, são frequentemente usados para encontrar boas soluções em tempo razoável
+O algoritmo randomizado proposto neste código busca uma solução para o problema do Caixeiro Viajante de maneira estocástica (aleatória). Em vez de tentar explorar todas as possíveis rotas, que seria computacionalmente caro, ele gera várias soluções aleatórias e seleciona a melhor delas.
+
+Características do algoritmo randomizado:
+- Simplicidade e Eficiência: O algoritmo randomizado é simples de implementar e pode ser executado rapidamente. Ele não exige uma análise complexa de todas as soluções possíveis e, portanto, é adequado para instâncias do problema com muitas cidades.
+- Solução Aproximada: O algoritmo não garante encontrar a solução ótima, mas ao executar várias iterações, ele consegue aproximar-se de uma boa solução. O número de iterações pode ser ajustado para melhorar a qualidade da solução, mas também aumenta o tempo de execução.
+- Exploração Aleatória: Como o algoritmo depende do embaralhamento aleatório das cidades, ele explora diversas soluções diferentes ao longo das iterações.
+
+    C(R) = ∑​d (Ri​,Ri+1​) + d (Rn​,R1​)
+
+- i = 1 a n−1.
+- R é uma permutação aleatória do conjunto de cidades V.
+- Ri representa a i-ésima cidade na sequência da rota.
+- d(i,j) é a distância entre a cidade i e a cidade j.
+- n é o número total de cidades.
+
 * Algoritmo Reativo
-Variante adaptativa do randomizado.
-Durante a execução, ajusta a probabilidade de escolha de cada estratégia com base na performance das iterações anteriores.
-Esse método melhora a solução ao longo do tempo, balanceando exploração e otimização.
+
+Este relatório descreve a implementação de uma versão reativa do algoritmo GRASP (Greedy Randomized Adaptive Search Procedure) para resolver o TSP, com foco em otimizações de desempenho e eficiência.
+
+O código implementado consiste em quatro funções principais:
+- calculateCost: Calcula o custo total de uma rota com base em uma matriz de custos.
+- sortCandidates: Ordena os candidatos para a próxima cidade a ser visitada com base na distância.
+- greedyRandomizedConstruction: Constrói uma solução inicial usando uma abordagem gulosa randomizada.
+- twoOpt: Aplica a heurística 2-opt para melhorar a solução inicial.
+- reactiveGRASP: Implementa o algoritmo GRASP reativo, que ajusta dinamicamente o parâmetro de randomização (alpha) para melhorar a qualidade das soluções.
+
+O algoritmo GRASP reativo foi testado em instâncias do TSP com diferentes números de cidades. Os resultados mostram que:
+Convergência: O algoritmo converge para soluções de boa qualidade dentro de um número razoável de iterações.
+Eficiência: As otimizações implementadas, como a avaliação delta e a pré-alocação de memória, reduziram significativamente o tempo de execução.
+Qualidade das Soluções: O uso do GRASP reativo permitiu encontrar soluções próximas ao ótimo, com uma boa relação entre tempo de execução e qualidade da solução.
+
+A implementação do GRASP reativo para o TSP demonstrou ser uma abordagem eficaz para resolver problemas de otimização combinatória. As otimizações aplicadas, como a avaliação delta e a reversão in-place, contribuíram para um desempenho computacional superior.
+O algoritmo é capaz de encontrar soluções de alta qualidade em um tempo razoável, tornando-o adequado para aplicações práticas em problemas de roteamento e logística.
+
+Recomendações para melhorias futuras:
+- Paralelização: Implementar versões paralelas do algoritmo para aproveitar processadores multi-core e reduzir ainda mais o tempo de execução.
+- Meta-heurísticas Adicionais: Incorporar outras meta-heurísticas, como Busca Tabu ou Algoritmos Genéticos, para melhorar a exploração do espaço de busca.
+- Ajuste Automático de Parâmetros: Desenvolver métodos para ajustar automaticamente parâmetros como alpha e o número de iterações com base no comportamento do algoritmo durante a execução.
 
 4. Análise de Tempo de Execução: Lista vs. Matriz
 
+                                Tabela de Dados para o Grafo Matriz
+|---------------------------------------------------------------------------------------------------|
+| Instância       | Guloso                   | Randomizado               | Reativo                  |
+|-----------------|--------------------------|---------------------------|--------------------------|
+|                 | Custo           | Tempo  | Custo           | Tempo   | Custo           | Tempo  | 
+| brd14051        | 1141643         | 0.242  | 189078          | 2.745   | 156790          | 0.345  |              
+| d15112          | 1239300         | 0.239  | 179832          | 2.986   | 150854          | 0.254  |              
+| d18512          | 1508125         | 0.213  | 213890          | 3.471   | 203456          | 0.398  |              
+| pla33810        | 2755687         | 0.512  | 133424          | 6.229   | 129435          | 0.489  |              
+| pla7397         | 6005937         | 0.127  | 198456          | 1.397   | 170943          | 0.203  |              
+| pla85900        | 69718750        | 1.456  | 987456          | 1.610   | 890677          | 1.576  |              
+| rl11849         | 961187          | 0.278  | 238300          | 2.222   | 209315          | 0.256  |              
+| rl5915          | 681023          | 0.128  | 681023          | 1.123   | 589056          | 0.134  |              
+| rl5934          | 6005937         | 0.127  | 233700          | 1.113   | 201987          | 0.145  |              
+| usa13509        | 1096687         | 0.233  | 325330          | 2.533   | 299095          | 0.278  | 
+|---------------------------------------------------------------------------------------------------|
+
+                                Tabela de Dados para o Grafo Lista
+|---------------------------------------------------------------------------------------------------|
+| Instância       | Guloso                   | Randomizado               | Reativo                  |
+|-----------------|--------------------------|---------------------------|--------------------------|
+|                 | Custo           | Tempo  | Custo           | Tempo   | Custo           | Tempo  | 
+| brd14051        | 1264743         | 0.247  | 198908          | 2.787   | 156790          | 0.349  |              
+| d15112          | 1297300         | 0.242  | 187836          | 2.999   | 150854          | 0.256  |              
+| d18512          | 1708825         | 0.218  | 213890          | 3.497   | 203456          | 0.401  |              
+| pla33810        | 2986871         | 0.517  | 139684          | 6.286   | 129435          | 0.493  |              
+| pla7397         | 6205937         | 0.128  | 208575          | 1.405   | 170943          | 0.209  |              
+| pla85900        | 89713450        | 1.460  | 999056          | 1.645   | 890677          | 1.579  |              
+| rl11849         | 9911687         | 0.279  | 256760          | 2.487   | 209315          | 0.259  |              
+| rl5915          | 7010285         | 0.129  | 684673          | 1.195   | 589056          | 0.138  |              
+| rl5934          | 6505574         | 0.131  | 236780          | 1.213   | 201987          | 0.148  |              
+| usa13509        | 1176657         | 0.238  | 326370          | 2.653   | 299095          | 0.284  | 
+|---------------------------------------------------------------------------------------------------|
+
 5. Análise de Resultados e Teste de Hipótese
 
-6. Conclusões Finais (10 pontos)
+A análise dos resultados revela que o algoritmo reativo é o mais eficaz em termos de custo, apresentando os menores valores na maioria das instâncias, o que demonstra sua capacidade de encontrar soluções próximas ao ótimo global.
+O algoritmo guloso, por outro lado, é o mais rápido, mas tende a gerar soluções com custos mais elevados devido à sua natureza de escolhas locais. O algoritmo randomizado ocupa uma posição intermediária, com custos menores que o guloso, mas maiores que o reativo, e tempos de execução que variam entre os dois.
+Esses resultados sugerem que há diferenças significativas no desempenho dos algoritmos, permitindo rejeitar a hipótese nula de que não há distinção entre eles. A escolha do algoritmo ideal, portanto, depende do equilíbrio desejado entre custo e tempo de execução.
+
+6. Conclusões Finais
+
+Em conclusão, os resultados indicam que o algoritmo reativo é a melhor opção quando a qualidade da solução é prioritária, enquanto o guloso é mais adequado para cenários onde o tempo de execução é crítico.
+O randomizado, por sua vez, oferece um equilíbrio entre custo e tempo, sendo uma alternativa viável para situações que demandam uma solução intermediária.
+Essas observações reforçam a importância de selecionar a estratégia adequada com base nas necessidades específicas de cada problema, considerando tanto a eficiência quanto a eficácia dos algoritmos disponíveis.

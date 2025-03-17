@@ -10,6 +10,14 @@ Daniel Alves Thielmann:
 * grafo_lista.cpp, grafo_matriz.cpp, grafo.cpp, listaAdj.cpp, tsp_loader.cpp.
 * main.cpp.
 
+Gabriel Duque Schiffner Oliveira:
+- Desenvolvimento e criação do algoritmo reativo para o problema do cacheiro Viajante
+- Alterações de funções/classes do sistema para suportar o código proposto
+
+Kauê Oliveira Paraízo Garcia: 
+- Desenvolvimento e criação do algoritmo guloso para o problema do cacheiro Viajante
+- Alterações de funções/classes do sistema para suportar o código proposto
+
 Michel Gomes de Andrade:
 - Arquivos criados:
 * algoritmorandomizado.h

@@ -1,7 +1,7 @@
 1. Introdução
 Este documento apresenta a documentação técnica do projeto desenvolvido para resolver o Problema do Caixeiro Viajante (TSP - Traveling Salesman Problem), utilizando diferentes abordagens e estruturas de dados.
 
-A implementação permite a leitura de instâncias do problema no formato Matrix Market (.mtx), armazena o grafo em diferentes representações (matriz de adjacência e lista de adjacência) e executa algoritmos heurísticos para encontrar soluções aproximadas.
+A implementação permite a leitura de instâncias do problema no formato Travelling Salesman Problem (.tsp), armazena o grafo em diferentes representações (matriz de adjacência e lista de adjacência) e executa algoritmos heurísticos para encontrar soluções aproximadas.
 
 2. Estrutura do Projeto
 O projeto segue a seguinte estrutura de diretórios:
@@ -13,6 +13,7 @@ TrabalhoGrafos_GrupoX/
 │   ├── relatorio.pdf
 │   ├── documentacao.pdf
 │   ├── contribuidores.pdf
+│   ├── descricao.pdf
 │
 │── include/                # Arquivos de cabeçalho (.h)
 │   ├── grafo.h
@@ -21,20 +22,28 @@ TrabalhoGrafos_GrupoX/
 │   ├── tsp_loader.h
 │   ├── mtx_loader.h
 │   ├── ListaAdj.h
+|   |── guloso.h
+|   |── reativo.h
+|   |── AlgoritmoRandomizado.h
+|   |── grafo_randomizado.h
 │
-│── src/                    # Implementação dos métodos
+│── src/                    # Implementação dos métodos (.cpp)
 │   ├── grafo.cpp
 │   ├── grafo_matriz.cpp
 │   ├── grafo_lista.cpp
 │   ├── tsp_loader.cpp
 │   ├── mtx_loader.cpp
 │   ├── ListaAdj.cpp
+|   |── guloso.cpp
+|   |── reativo.cpp
+|   |── AlgoritmoRandomizado.cpp
+|   |── grafo_randomizado.cpp
 │
 │── entradas/                # Arquivos de entrada do programa
 │   ├── instancias/          # Instâncias do problema
-│   │   ├── road-asia-osm.mtx
-│   │   ├── road-belgium-osm.mtx
-│   │   ├── road-germany-osm.mtx
+│   │   ├── brd14051.tsp  
+│   │   ├── d15112.tsp  
+│   │   ├── d18512.tsp
 │   │   ├── ...
 │   ├── grafo1.txt
 │   ├── grafo2.txt
@@ -45,7 +54,7 @@ A seguir, detalhamos o funcionamento dos principais arquivos do projeto.
 3.1 main.cpp
 Este é o arquivo principal do projeto. Ele realiza as seguintes operações:
 
-Lê o arquivo de entrada (.mtx) e carrega o grafo na estrutura escolhida.
+Lê o arquivo de entrada (.tsp) e carrega o grafo na estrutura escolhida.
 Executa os algoritmos do Caixeiro Viajante (guloso, randomizado e reativo).
 Exibe os resultados e estatísticas de tempo de execução.
 
@@ -62,10 +71,10 @@ Vantagem: Uso eficiente de memória para grafos esparsos.
 Desvantagem: Acesso a uma aresta específica pode ser O(n).
 
 3.3 Carregamento das Instâncias
-O carregamento dos arquivos .mtx foi implementado nos seguintes arquivos:
+O carregamento dos arquivos .tsp foi implementado nos seguintes arquivos:
 
-3.3.1 mtx_loader.h / mtx_loader.cpp
-Lê os arquivos .mtx e converte os dados para lista de adjacência.
+3.3.1 mtx_loader.h / tsp_loader.cpp
+Lê os arquivos .tsp e converte os dados para lista de adjacência.
 Ignora linhas de comentário (%).
 Exibe mensagens de progresso a cada 100.000 arestas carregadas.
 3.3.2 ListaAdj.h / ListaAdj.cpp
@@ -79,14 +88,34 @@ Os seguintes algoritmos foram implementados para resolver o Caixeiro Viajante:
 Começa em um vértice qualquer e escolhe sempre o vizinho mais próximo.
 Complexidade: O(n²).
 Desvantagem: Pode levar a soluções ruins em alguns casos.
+Funções:
+- resolverTSPMatriz(const GrafoMatriz& grafo): Resolve o Problema do Caixeiro Viajante (TSP) usando uma abordagem gulosa para o grafo matriz.
+- resolverTSPLista(const GrafoLista& grafo): Resolve o Problema do Caixeiro Viajante (TSP) usando uma abordagem gulosa para o grafo lista.
+- getMelhorRota(int& tamanho): Retorna a melhor rota encontrada e seu tamanho.
+- getMenorCusto(): Retorna o menor custo da rota encontrada.
+- getNumCidades(): Retorna o número de cidades no problema.
+
 4.2 Algoritmo Randomizado
 Explora K vizinhos aleatórios ao invés de apenas o mais próximo.
 Introduz variabilidade para escapar de mínimos locais.
 Complexidade: O(n log n), dependendo do número de iterações.
+Funções:
+- AlgoritmoRandomizado(const GrafoMatriz& g): Construtor que inicializa o objeto, define o menor custo como infinito e armazena o número de cidades e o grafo.
+- resolver(int iteracoes): Executa o algoritmo randomizado para resolver o Problema do Caixeiro Viajante (TSP) por um número específico de iterações.
+- exibirMelhorRota(): Exibe a melhor rota encontrada e seu custo.
+- obterDistancia(int cidade1, int cidade2): Retorna a distância entre duas cidades, verificando se os índices são válidos.
+- obterNumCidades(): Retorna o número de cidades no problema.
+
 4.3 Algoritmo Reativo
 Variante aprimorada do algoritmo randomizado.
 Ajusta as probabilidades de escolha de cada estratégia conforme a execução avança.
 Complexidade: Depende da configuração dos pesos de adaptação.
+Funções:
+- calculateCost(int* route, int n, double** costMatrix): Calcula o custo total de uma rota (ciclo) com base na matriz de custos.
+- sortCandidates(int* candidates, int count, int current, double** costMatrix):  Ordena os candidatos por distância em relação à cidade atual, usando o algoritmo de ordenação por seleção.
+- greedyRandomizedConstruction(double** costMatrix, int n, double alpha): Constrói uma solução inicial para o problema usando uma abordagem gulosa randomizada (GRASP).
+- twoOpt(int* route, int n, double** costMatrix): Aplica a heurística 2-opt para melhorar a rota, trocando pares de arestas para reduzir o custo.
+- reactiveGRASP(double** costMatrix, int n, int maxIterations): Implementa o GRASP reativo, que ajusta dinamicamente o parâmetro alpha para balancear diversificação e intensificação.
 
 5. Compilação e Execução
 O código foi desenvolvido em C++ e pode ser compilado utilizando o g++.
@@ -97,11 +126,11 @@ g++ -o main.exe main.cpp src/*.cpp -I./include -g -Wall -Werror
 
 5.2 Execução
 Para rodar o programa e processar uma instância:
-.\main.exe -p -m entradas/instancias/road-usroads.mtx
+./main.exe -p -m entradas/instancias/pla85900.tsp
 
 5.3 Teste de Memória com Valgrind
 Para verificar vazamentos de memória:
-valgrind ./main.exe -p -m entradas/instancias/road-usroads.mtx
+valgrind ./main.exe -p -m entradas/instancias/pla85900.tsp
 
 6. Conclusões
 A implementação suporta grandes instâncias do TSP, utilizando lista de adjacência para eficiência de memória.
