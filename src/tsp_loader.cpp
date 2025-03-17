@@ -53,15 +53,17 @@ void TSPLoader::carregarTSP(const std::string& nomeArquivo, GrafoMatriz*& grafoM
     int id;
     double x, y;
     vector<pair<double, double>> coordenadas;
-    
+        
     for (int i = 0; i < numVertices; i++) {
-        if (!(arquivo >> id >> x >> y)) {
-            cerr << "[ERRO] Falha ao ler as coordenadas dos vertices." << endl;
-            return;
-        }
-        coordenadas.push_back({x, y});
-        cout << "Vertice " << id << ": (" << x << ", " << y << ")" << endl;
+    if (!(arquivo >> id >> x >> y)) {
+        cerr << "[ERRO] Falha ao ler as coordenadas dos vertices." << endl;
+        return;
     }
+    coordenadas.push_back({x, y});
+    cout << "Vertice " << (id - 1) << ": (" << x << ", " << y << ")" << endl;  // Ajuste do índice
+    }
+
+
 
     // Criando as arestas com base na distância Euclidiana
     for (int i = 0; i < numVertices; i++) {

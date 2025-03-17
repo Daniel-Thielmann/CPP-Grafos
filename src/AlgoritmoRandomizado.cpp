@@ -88,8 +88,8 @@ void AlgoritmoRandomizado::resolver(int iteracoes) {
 
 
 void AlgoritmoRandomizado::exibirMelhorRota() const {
-    if (!melhorRota || menorCusto == -1) {
-        cout << "[ERRO] Nenhuma rota foi encontrada." << endl;
+    if (!melhorRota || menorCusto == INT_MAX) {  // Verifica se nenhuma solução foi encontrada
+        cout << "[ERRO] Nenhuma solução válida foi encontrada!" << endl;
         return;
     }
 
@@ -100,6 +100,7 @@ void AlgoritmoRandomizado::exibirMelhorRota() const {
     cout << melhorRota[0] << endl;
     cout << "Custo: " << menorCusto << endl;
 }
+
 
 // Método para obter a distância entre duas cidades
 int AlgoritmoRandomizado::obterDistancia(int cidade1, int cidade2) const {

@@ -6,21 +6,13 @@
 
 using namespace std;
 
+// ✅ Construtor corrigido para garantir valores iniciais válidos
 GrafoRandomizado::GrafoRandomizado(const Grafo& g)
-    : grafo(g), melhorRota(nullptr), menorCusto(INT_MAX), numCidades(g.getNumVertices()) {
-    if (numCidades <= 0) {
-        cerr << "[ERRO] Numero invalido de cidades!" << endl;
-    }
-}
+    : grafo(g), melhorRota(nullptr), menorCusto(INT_MAX), numCidades(g.getNumVertices()) {}
 
 void GrafoRandomizado::resolver(int iteracoes) {
     if (iteracoes <= 0) {
         cerr << "[ERRO] O numero de iteracoes deve ser positivo!" << endl;
-        return;
-    }
-
-    if (numCidades <= 1) {
-        cerr << "[ERRO] O grafo deve ter pelo menos 2 cidades para calcular um caminho!" << endl;
         return;
     }
 
@@ -31,62 +23,66 @@ void GrafoRandomizado::resolver(int iteracoes) {
 
     srand(time(nullptr));
 
+    bool encontrouSolucao = false;
+
     for (int i = 0; i < iteracoes; i++) {
         if (i % 100 == 0) {
             cout << "[LOG] Iteracao " << i << " de " << iteracoes << "..." << endl;
         }
 
-        // 🚀 Embaralhar o vetor de cidades (evita múltiplos swaps)
+        // ✅ Fisher-Yates Shuffle para gerar permutação válida
         for (int j = numCidades - 1; j > 0; j--) {
             int k = rand() % (j + 1);
             swap(cidades[j], cidades[k]);
         }
 
         int custoAtual = 0;
-        bool rotaValida = true;
+        bool caminhoValido = true;
 
         for (int j = 0; j < numCidades - 1; j++) {
             int distancia = grafo.obterDistancia(cidades[j], cidades[j + 1]);
-            if (distancia <= 0 || distancia >= INT_MAX) { // 🚨 Distâncias inválidas
-                rotaValida = false;
+            if (distancia <= 0) {  // ❌ Evita arestas inválidas
+                caminhoValido = false;
                 break;
             }
             custoAtual += distancia;
         }
 
-        // 🚀 Fechar o ciclo e verificar a distância de volta à cidade inicial
+        // ✅ Fecha o ciclo para retornar à cidade inicial
         int distanciaRetorno = grafo.obterDistancia(cidades[numCidades - 1], cidades[0]);
-        if (distanciaRetorno <= 0 || distanciaRetorno >= INT_MAX) {
-            rotaValida = false;
+        if (distanciaRetorno <= 0) {
+            caminhoValido = false;
         } else {
             custoAtual += distanciaRetorno;
         }
 
-        if (rotaValida && custoAtual < menorCusto) {
+        if (caminhoValido && custoAtual < menorCusto) {
             menorCusto = custoAtual;
+            encontrouSolucao = true;
 
             if (melhorRota) {
                 delete[] melhorRota;
             }
             melhorRota = new int[numCidades];
-
             for (int j = 0; j < numCidades; j++) {
                 melhorRota[j] = cidades[j];
             }
         }
     }
 
-    delete[] cidades;
-
-    if (menorCusto == INT_MAX) {
-        cerr << "[ERRO] Nenhuma solução válida foi encontrada!" << endl;
-        menorCusto = -1; // 🚨 Evita que retorne um valor absurdo
+    // ✅ Se nenhuma solução foi encontrada, manter `menorCusto` como INT_MAX
+    if (!encontrouSolucao) {
+        menorCusto = INT_MAX;
+        cout << "[ERRO] Nenhuma solução válida foi encontrada!" << endl;
     }
+
+    delete[] cidades;
 }
 
+// ✅ Adicionada verificação para evitar imprimir uma rota inválida
 void GrafoRandomizado::exibirMelhorRota() const {
-    if (!melhorRota || menorCusto == -1) {
-        cout << "[ERRO] Nenhuma rota foi encontrada." << endl;
+    if (!melhorRota || menorCusto == INT_MAX) {
+        cout << "[ERRO] Nenhuma rota válida encontrada!" << endl;
         return;
     }
 
@@ -104,6 +100,7 @@ GrafoRandomizado::~GrafoRandomizado() {
     }
 }
 
+// ✅ Garante que `menorCusto` só retorna um valor válido
 int GrafoRandomizado::getMenorCusto() const {
-    return (menorCusto == -1) ? INT_MAX : menorCusto;
+    return (menorCusto == INT_MAX) ? -1 : menorCusto;
 }

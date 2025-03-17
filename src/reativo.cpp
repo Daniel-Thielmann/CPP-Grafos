@@ -12,11 +12,14 @@ using namespace std;
 //---------------------------------------------------------------------
 double calculateCost(int* route, int n, double** costMatrix) {
     double cost = 0;
-    for (int i = 0; i < n; i++) {
-        cost += costMatrix[route[i]][route[i+1]];
+    for (int i = 0; i < n - 1; i++) {
+        cost += costMatrix[route[i]][route[i + 1]];
     }
+    // Adicionar retorno ao ponto inicial
+    cost += costMatrix[route[n - 1]][route[0]];
     return cost;
 }
+
 
 //---------------------------------------------------------------------
 // sortCandidates: ordenação por seleção 
