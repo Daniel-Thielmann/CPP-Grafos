@@ -3,20 +3,19 @@
 
 #include "grafo_matriz.h"
 
-// Classe que implementa um algoritmo randomizado para o problema do Caixeiro Viajante
 class AlgoritmoRandomizado {
 private:
     const GrafoMatriz& grafo; // Referência para o grafo
-    int menorCusto;     // Armazena o menor custo encontrado
-    int numCidades;     // Armazena o número de cidades no grafo
-    int* melhorRota;    // Armazena a melhor rota encontrada (array dinâmico)
+    int menorCusto;           // Menor custo encontrado
+    int numCidades;           // Número de cidades no grafo
+    int* melhorRota;          // Melhor rota encontrada
 
 public:
-    AlgoritmoRandomizado(const GrafoMatriz& g);  // Construtor
-    ~AlgoritmoRandomizado();                     // Destrutor para liberar memória alocada
+    AlgoritmoRandomizado(const GrafoMatriz& g);
+    ~AlgoritmoRandomizado();
 
-    void resolver(int iteracoes);                // Executa a busca aleatória para encontrar a melhor rota
-    void exibirMelhorRota() const;               // Exibe a melhor rota encontrada e seu custo
+    void resolver(int iteracoes);
+    void exibirMelhorRota() const;
 
     int obterDistancia(int cidade1, int cidade2) const;
     int obterNumCidades() const;

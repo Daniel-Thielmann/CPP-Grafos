@@ -3,19 +3,19 @@
 
 #include "Grafo.h"
 
-// Classe que implementa um algoritmo randomizado para o problema do Caixeiro Viajante
 class GrafoRandomizado {
 private:
-    const Grafo& grafo; // PRIMEIRO: Referência para o grafo
-    int* melhorRota;    // SEGUNDO: Melhor rota encontrada (array dinâmico)
-    int menorCusto;     // TERCEIRO: Menor custo encontrado
-    int numCidades;     // QUARTO: Número de cidades no grafo
+    const Grafo& grafo;
+    int* melhorRota;
+    int menorCusto;
+    int numCidades;
 
 public:
-    GrafoRandomizado(const Grafo& g);  // Construtor
-    ~GrafoRandomizado();               // Destrutor para liberar memória alocada
-    void resolver(int iteracoes);      // Executa a busca aleatória para encontrar a melhor rota
-    void exibirMelhorRota() const;     // Exibe a melhor rota encontrada e seu custo
+    GrafoRandomizado(const Grafo& g);
+    ~GrafoRandomizado();
+    void resolver(int iteracoes);
+    void exibirMelhorRota() const;
+    int getMenorCusto() const;
 };
 
 #endif // GRAFORANDOMIZADO_H
